@@ -1,26 +1,19 @@
-# Sportsbook Notebook — v0.01.013
+# Sportsbook Notebook v0.01.014
 
-Personal browser-based sportsbook ticket notebook with OCR, ticket tracking, live ESPN football scores, experimental spread analytics and read-only Kalshi market-data exploration.
+This release adds a configurable read-only feed gateway to the existing v0.01.013 app. Ticket OCR, storage, export/import, tabs and ESPN Gamecast links are preserved.
 
-## Deploy
+## Install
+1. Export a notebook backup in the existing app.
+2. Replace `index.html` in your GitHub Pages repository.
+3. Optionally deploy `worker.js` as a Cloudflare Worker (Workers & Pages > Create application > Worker > edit code > Deploy). Copy its full `https://...workers.dev` address.
+4. In the app's Live Football panel, paste that base URL into **Optional feed gateway URL** and press **Save gateway**. Refresh ESPN scores. To revert, press **Use direct feeds**.
+5. Visit `<your-worker-url>/health` to verify the Worker. It reports whether Kalshi is enabled.
 
-1. Export a backup from the running notebook before updating.
-2. Replace the repository-root `index.html` with the file from this release. Optionally update `README.md`, `CHANGELOG.md`, and `TESTING.md`.
-3. Commit changes and wait for GitHub Pages to publish. Reload Safari; confirm **v0.01.013** appears at the top.
+## Kalshi permissions
+The Worker deliberately returns HTTP 403 for Kalshi by default. Kalshi's developer agreement includes API access and use requirements. Do not enable the gateway's Kalshi forwarding until you have established authorization for your intended use. If authorized, configure the Worker environment variable `ALLOW_KALSHI` to the string `true` and redeploy. This app does not log in, place orders or trade.
 
-Ticket records remain in the browser's local storage under the existing key. The app does not synchronize data across browsers. Export/import is the supported transfer mechanism.
+## Architecture
+GitHub Pages (static PWA) -> HTTPS Cloudflare Worker -> allowlisted public upstream endpoint. The gateway only supports fixed ESPN league/date and Kalshi series queries, with 20-second upstream caching and CORS limited to the existing GitHub Pages origin. No ticket data is sent to the Worker.
 
-## What's new
-
-- Four tabs in Football Live Lab: **Games**, **My Tickets**, **Kalshi**, and **Diagnostics**. Feed controls remain visible above the tabs.
-- Canonical NFL team-code alias matching for Kalshi event tickers, including common alternate codes, with exact date and both-team checks.
-- Kalshi status text now includes the count of exact game matches after a successful market-data import.
-- Kalshi fetch no longer restricts listings to `status=open`; this helps with in-progress listings that have different states, but does not solve cross-origin browser restrictions.
-- Retains the v12 ESPN Gamecast button, ticket notebook, backup/import and OCR.
-
-## Known limitations
-
-- The Kalshi endpoint may be blocked by browser cross-origin (CORS) policy. The Diagnostics tab retains manual JSON file/paste import as a fallback. Opening an API URL directly does not prove browser `fetch()` can read it.
-- Market matching is restricted to recognizable NFL matchup tickers, including the ticker's date and both team abbreviations. College football and some market formats may remain unmatched. Ambiguous abbreviations are not guessed.
-- The app does not derive spread-cover probabilities from Kalshi winner quotes. Its live spread-cover estimates are experimental and uncalibrated. No trades or automatic ticket settlement.
-- Game details and tabs are refreshed from third-party services; external feed availability varies.
+## Caveats
+This version provides gateway integration, not a deployed service; the Cloudflare account owner must deploy it. No external connectivity test was performed. Feed success depends on upstream availability and permitted access. Keep manual JSON import as an emergency diagnostic fallback.
