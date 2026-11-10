@@ -1,20 +1,21 @@
-# Sportsbook Notebook v0.01.015
+# Sportsbook Notebook v0.01.016 — Simulator input fix
+
+## Changes
+- American odds inputs use editable text fields, supporting direct replacement and plus/minus signs on iPad Safari.
+- Moneyline selections display one odds input; the redundant disabled moneyline field is removed.
+- Spread selections display two explicit fields: point spread and American odds.
+- Missing or invalid values are identified under each selection.
+- Blank odds and odds with absolute value under 100 are rejected, rather than interpreted as valid odds.
+- The payout is calculated only when all required values are present and valid.
+- Existing ticket storage, proposed bets, and ticket format are unchanged.
 
 ## Install
-1. Export a backup from the running notebook.
-2. Replace the repository root `index.html` with the supplied `sportsbook-notebook-v0.01.015-index.html` (rename it `index.html` in GitHub).
-3. Commit and wait for GitHub Pages deployment; hard-refresh the browser.
-4. Existing local tickets use the same storage key. Keep a backup before updating.
+1. Export a notebook backup from the current app.
+2. Upload `index.html` from the ZIP to the GitHub Pages repository root, replacing the previous `index.html`.
+3. Refresh Safari (if necessary, close the tab and reopen the site).
+4. Confirm the header shows v0.01.016.
 
-## Added
-- Bet Simulator: select ESPN games and sides, manually verify/enter American odds and spreads, calculate straight, parlay, or round-robin gross returns.
-- $2 minimum per straight/parlay, $1 per round-robin combination.
-- Save a proposal, show a separate proposed-bets list, kiosk view in new tab, and convert a proposal into a purchased ticket.
-- Read-only ESPN final-score evaluation for straight and parlay legs, with push handling. No automatic changes to actual settlement or redemption.
+## Test
+Choose Parlay, add three different games as spread selections, type `-4.5` in each point-spread field and `-110` in each American-odds field, and set the wager to $2. Gross payout should be approximately $7.23, net profit approximately $5.23. These are example inputs, not actual sportsbook quotes.
 
-## Important limitations
-- Polymarket integration is NOT included in this build. ESPN is the game source; ESPN odds can be missing, so manual prices are required.
-- Round-robin leg outcomes are displayed, but complete automatic per-combination payout settlement is not implemented.
-- Evaluation uses only the currently loaded ESPN date/league and does not persist results.
-- Opposing picks from the same game are rejected in the simulator.
-- For real wagers, verify sportsbook minimums, prices and ticket details at purchase.
+This patch has passed JavaScript syntax validation but has not been tested interactively in iPad Safari. Live odds availability is unchanged.
