@@ -1,19 +1,20 @@
-# Sportsbook Notebook v0.01.014
-
-This release adds a configurable read-only feed gateway to the existing v0.01.013 app. Ticket OCR, storage, export/import, tabs and ESPN Gamecast links are preserved.
+# Sportsbook Notebook v0.01.015
 
 ## Install
-1. Export a notebook backup in the existing app.
-2. Replace `index.html` in your GitHub Pages repository.
-3. Optionally deploy `worker.js` as a Cloudflare Worker (Workers & Pages > Create application > Worker > edit code > Deploy). Copy its full `https://...workers.dev` address.
-4. In the app's Live Football panel, paste that base URL into **Optional feed gateway URL** and press **Save gateway**. Refresh ESPN scores. To revert, press **Use direct feeds**.
-5. Visit `<your-worker-url>/health` to verify the Worker. It reports whether Kalshi is enabled.
+1. Export a backup from the running notebook.
+2. Replace the repository root `index.html` with the supplied `sportsbook-notebook-v0.01.015-index.html` (rename it `index.html` in GitHub).
+3. Commit and wait for GitHub Pages deployment; hard-refresh the browser.
+4. Existing local tickets use the same storage key. Keep a backup before updating.
 
-## Kalshi permissions
-The Worker deliberately returns HTTP 403 for Kalshi by default. Kalshi's developer agreement includes API access and use requirements. Do not enable the gateway's Kalshi forwarding until you have established authorization for your intended use. If authorized, configure the Worker environment variable `ALLOW_KALSHI` to the string `true` and redeploy. This app does not log in, place orders or trade.
+## Added
+- Bet Simulator: select ESPN games and sides, manually verify/enter American odds and spreads, calculate straight, parlay, or round-robin gross returns.
+- $2 minimum per straight/parlay, $1 per round-robin combination.
+- Save a proposal, show a separate proposed-bets list, kiosk view in new tab, and convert a proposal into a purchased ticket.
+- Read-only ESPN final-score evaluation for straight and parlay legs, with push handling. No automatic changes to actual settlement or redemption.
 
-## Architecture
-GitHub Pages (static PWA) -> HTTPS Cloudflare Worker -> allowlisted public upstream endpoint. The gateway only supports fixed ESPN league/date and Kalshi series queries, with 20-second upstream caching and CORS limited to the existing GitHub Pages origin. No ticket data is sent to the Worker.
-
-## Caveats
-This version provides gateway integration, not a deployed service; the Cloudflare account owner must deploy it. No external connectivity test was performed. Feed success depends on upstream availability and permitted access. Keep manual JSON import as an emergency diagnostic fallback.
+## Important limitations
+- Polymarket integration is NOT included in this build. ESPN is the game source; ESPN odds can be missing, so manual prices are required.
+- Round-robin leg outcomes are displayed, but complete automatic per-combination payout settlement is not implemented.
+- Evaluation uses only the currently loaded ESPN date/league and does not persist results.
+- Opposing picks from the same game are rejected in the simulator.
+- For real wagers, verify sportsbook minimums, prices and ticket details at purchase.
