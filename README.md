@@ -1,21 +1,21 @@
-# Sportsbook Notebook v0.01.017
+# Sportsbook Notebook v0.01.018
 
-## Changes
-- Round robin defaults to 2-team combinations; choose 3-team or all 2+ combinations explicitly. A 3-team selection from exactly 3 picks is **one** combination, not three.
-- Wager defaults to $1 per round-robin combination and $2 for straight/parlay.
-- Moneyline selections use the corresponding team's ESPN American moneyline odds when available.
-- Spread selections prefill the selected team's signed spread from ESPN's `details` string where team abbreviation matches, and prefill spread **price** only if ESPN provides it separately.
-- Added Over and Under selections, prefilled with ESPN total when supplied, with separately entered total price if not supplied.
-- One market per game per ticket; same-game correlated selections require special sportsbook pricing and are not modeled.
-- Preserves `sportsbook-notebook-v1` storage key and existing tickets.
+## What's new
+- Attempts ESPN game-detail (`summary?event=...`) enrichment for each upcoming loaded matchup. Reads detailed pickcenter odds when available, including team-specific moneyline, spread, spread price, total and over/under prices.
+- Adds ESPN matchup win prediction where present in the returned summary.
+- Attempts public Polymarket Gamma sports discovery and open-event retrieval; matches only when both teams and the event date agree, and displays winner prices as distinct from ESPN predictions and sportsbook odds.
+- Missing, unsupported or blocked feeds are explicitly marked unavailable; no fabricated prices.
+- Existing round-robin combination logic and ticket storage key are unchanged from v0.01.017.
 
-## Limitations
-- ESPN odds fields vary; prices that are not actually supplied stay blank. Never interpret the spread or total number as the American price. Check current kiosk prices.
-- Round-robin gross payout assumes every combination wins; actual partial wins and pushes require further settlement work.
-- No live Safari end-to-end test performed; JavaScript syntax checked.
+## Install
+1. Export your notebook backup in the current app.
+2. Rename `sportsbook-notebook-v0.01.018-index.html` to `index.html` and upload to your GitHub Pages repository root, replacing the prior file.
+3. Reload Safari and confirm `v0.01.018` at the top.
+4. In Bet Simulator, press `Load ESPN games`, expand a matchup, and inspect auto-filled lines and ESPN/Polymarket comparison.
 
-## Deployment
-1. Export a backup from your existing app.
-2. Upload the included `index.html` to your GitHub Pages repository root, replacing the existing one.
-3. Refresh Safari and confirm v0.01.017.
-4. Choose Round Robin, 2-team, three different games, and $1 per combination. You should see 3 individual bets, $3 cost. At -110 on all three, all-win gross return is about $10.99.
+## Limitations and testing
+- ESPN public endpoints and Polymarket Gamma may block cross-origin requests in iPad Safari; direct opening of API URLs is not proof that browser `fetch` works.
+- ESPN summary may omit betting market prices and predictor fields. Blank means no verified price; enter kiosk prices manually.
+- Polymarket match is conservative and will remain unavailable if sports series discovery, date matching, market shape or CORS fails. No trading or accounts involved.
+- Displayed odds are snapshots, not guaranteed kiosk prices. Predictions and Polymarket winner prices do not predict spread cover.
+- This build passed JavaScript syntax validation and ZIP integrity testing, but live iPad Safari integration remains unverified.
