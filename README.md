@@ -1,21 +1,24 @@
-# Sportsbook Notebook v0.01.018
+# Sportsbook Notebook v0.01.019
 
-## What's new
-- Attempts ESPN game-detail (`summary?event=...`) enrichment for each upcoming loaded matchup. Reads detailed pickcenter odds when available, including team-specific moneyline, spread, spread price, total and over/under prices.
-- Adds ESPN matchup win prediction where present in the returned summary.
-- Attempts public Polymarket Gamma sports discovery and open-event retrieval; matches only when both teams and the event date agree, and displays winner prices as distinct from ESPN predictions and sportsbook odds.
-- Missing, unsupported or blocked feeds are explicitly marked unavailable; no fabricated prices.
-- Existing round-robin combination logic and ticket storage key are unchanged from v0.01.017.
+## Changes
+- Removes visible Kalshi references and uses Polymarket naming and public Gamma events.
+- Adds ESPN prediction / Polymarket winner-price comparison with percentage-point differences when an exact game match is verified.
+- Polymarket event discovery attempts NFL sports series and NFL tag, deduplicates events, and requires team/date match.
+- Refreshed responsive visual styling and navigation spacing for iPad/iPhone.
+- Keeps existing ticket localStorage key `sportsbook-notebook-v1` and saved ticket format.
+
+## Important limitations
+- Polymarket's international Gamma API and polymarket.us are not the same feed; prices may differ.
+- Polymarket matches may still be absent. CORS and API schema are not guaranteed. Never infer a quote when unmatched.
+- ESPN prediction is win probability, not spread-cover probability. Polymarket quotes are market prices, not fair probabilities.
+- This version retains NFL/college football only; NHL, NBA and English football are roadmap items, not implemented.
+- The old optional gateway configuration remains for ESPN compatibility.
 
 ## Install
-1. Export your notebook backup in the current app.
-2. Rename `sportsbook-notebook-v0.01.018-index.html` to `index.html` and upload to your GitHub Pages repository root, replacing the prior file.
-3. Reload Safari and confirm `v0.01.018` at the top.
-4. In Bet Simulator, press `Load ESPN games`, expand a matchup, and inspect auto-filled lines and ESPN/Polymarket comparison.
+1. Export your existing backup.
+2. Rename `sportsbook-notebook-v0.01.019-index.html` to `index.html` and upload to your GitHub Pages repository.
+3. Reload Safari and confirm v0.01.019.
+4. Test ESPN odds, predictor, Polymarket status, proposals and round robin payouts.
 
-## Limitations and testing
-- ESPN public endpoints and Polymarket Gamma may block cross-origin requests in iPad Safari; direct opening of API URLs is not proof that browser `fetch` works.
-- ESPN summary may omit betting market prices and predictor fields. Blank means no verified price; enter kiosk prices manually.
-- Polymarket match is conservative and will remain unavailable if sports series discovery, date matching, market shape or CORS fails. No trading or accounts involved.
-- Displayed odds are snapshots, not guaranteed kiosk prices. Predictions and Polymarket winner prices do not predict spread cover.
-- This build passed JavaScript syntax validation and ZIP integrity testing, but live iPad Safari integration remains unverified.
+## Validation
+JavaScript syntax checked with Node; HTML DOM interactions require Safari testing.
