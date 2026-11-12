@@ -158,15 +158,6 @@ function showTicketAnalytics(){
  '<p class="small-note">Read-only exposure: no wager settlement or cash-out changes. A matched team does not prove a specific spread or total is correctly linked; confirm game dates.</p>'+
  (matched.length?matched.map(x=>'<details class="gamecard"><summary><strong>'+esc(x.ticket.ticketno||x.ticket.type)+'</strong> · '+money(x.ticket.stake)+' · '+x.legs.filter(l=>l.game).length+'/'+x.legs.length+' legs matched</summary><div class="body">'+x.legs.map(l=>'<div class="market-event">'+esc(l.leg)+' <span class="pill">'+esc(l.result)+'</span>'+(l.game?'<div class="small-note">'+esc(l.game.away.display)+' @ '+esc(l.game.home.display)+'</div>':'')+'</div>').join('')+'</div></details>').join(''):'<p class="muted">No open purchased tickets.</p>');
 }
-function showTicketAnalytics() {
-  const out = document.getElementById('ticketanalytics');
-  if (!out) return;
-  out.innerHTML =
-    '<p class="small-note">' +
-    'Ticket analytics panel restored. ' +
-    'Game results and wager settlement remain separate.' +
-    '</p>';
-}
 function showGames(){const out=$('livegames');out.innerHTML='<h3>Games & scores ('+liveGames.length+')</h3>'+(liveGames.length?liveGames.map(gameView).join(''):'<p class="muted">No games returned for this date.</p>');showOverview();showTicketAnalytics()}
 function quote(m){return m?.title||m?.question||'Winner market'}
 function marketView(m){const title=esc(m.title||m.slug||'NFL event');const url=marketLink(m);return '<div class="market-event"><strong>'+title+'</strong> '+(url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">View market ↗</a>':'')+'</div>'}
